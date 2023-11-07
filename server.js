@@ -22,9 +22,8 @@ function htmlResponse(res, content) {
 
 function randomPhrase(array) {
     if (array.length === 0) {
-        // Se hai esaurito tutte le frasi, reimposta l'array motivationalPhrase utilizzando usedPhrase
         array.push(...usedPhrase);
-        usedPhrase.length = 0; // Svuota l'array usedPhrase
+        usedPhrase.length = 0;
     }
 
     const randomIndex = Math.floor(Math.random() * array.length);
