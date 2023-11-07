@@ -13,17 +13,28 @@ const motivationalPhrase = [
     "Il fallimento è solo l'opportunità di iniziare di nuovo, in modo più intelligente."
 ];
 
+const usedPhrase = [];
+
 function htmlResponse(res, content) {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
     res.end(content);
 }
 
 function randomPhrase(array) {
+    if (array.length === 0) {
+        // Se hai esaurito tutte le frasi, reimposta l'array motivationalPhrase utilizzando usedPhrase
+        array.push(...usedPhrase);
+        usedPhrase.length = 0; // Svuota l'array usedPhrase
+    }
+
     const randomIndex = Math.floor(Math.random() * array.length);
-    return array[randomIndex];
+    const phrase = array.splice(randomIndex, 1)[0];
+    usedPhrase.push(phrase);
+    return phrase;
 }
 
 const server = http.createServer(function (req, res) {
+    if (req.url === '/favicon.ico') res.writeHead(404).end();
     const phrase = randomPhrase(motivationalPhrase);
     const htmlContent = `<h1>${phrase}</h1>`;
     htmlResponse(res, htmlContent);
